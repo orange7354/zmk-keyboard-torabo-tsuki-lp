@@ -3,6 +3,15 @@
 #include <dt-bindings/zmk/input_transform.h>
 #include <zephyr/dt-bindings/input/input-event-codes.h>
 
+/ {
+    scroll_scaler: scroll_scaler {
+        compatible = "zmk,input-processor-scaler";
+        #input-processor-cells = <2>;
+        type = <INPUT_EV_REL>;
+        codes = <INPUT_REL_WHEEL INPUT_REL_HWHEEL>;
+        track-remainders;
+    };
+};
 
 &zip_temp_layer {
     excluded-positions = <26 27 28 33 34 35 47>;
@@ -24,6 +33,15 @@
         input-processors = <
             &zip_xy_transform (INPUT_TRANSFORM_X_INVERT | INPUT_TRANSFORM_Y_INVERT)
             &zip_xy_scaler 1 8
+        >;
+    };
+
+    precision_scroll_layers: precision_scroll_layers {
+        layers = <7>;
+        input-processors = <
+            &zip_xy_transform (INPUT_TRANSFORM_X_INVERT | INPUT_TRANSFORM_Y_INVERT)
+            &zip_xy_to_scroll_mapper
+            &scroll_scaler 1 4
         >;
     };
 };
